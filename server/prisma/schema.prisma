@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MessageType {
+  USER
+  AI
+}
+
+model Message {
+  id        Int         @id @default(autoincrement())
+  username  String
+  content   String
+  type      MessageType @default(USER)
+  createdAt DateTime    @default(now())
+}
+
