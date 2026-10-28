@@ -110,19 +110,19 @@ wss.on("connection", async (socket, request) => {
 
       if (!content || content.length > 2000) return;
 
-      // 1. Save and broadcast the user's message.
+      
       await saveAndBroadcast(
         username,
         content,
         "USER"
       );
 
-      // 2. Normal messages never call Gemini.
+    
       if (!/@ai\b/i.test(content)) {
         return;
       }
 
-      // 3. Remove @ai before sending the question.
+      
       const question = content
         .replace(/@ai\b/gi, "")
         .trim();
@@ -137,7 +137,7 @@ wss.on("connection", async (socket, request) => {
         return;
       }
 
-      // 4. Ask Gemini.
+      
       const response = await ai.models.generateContent({
   model: "gemini-3.6-flash",
   contents: question
@@ -147,7 +147,7 @@ wss.on("connection", async (socket, request) => {
         response.text?.trim() ||
         "Sorry, I couldn't generate a response.";
 
-      // 5. Save and broadcast the AI response.
+      
       await saveAndBroadcast(
         "Gemini",
         answer.slice(0, 10000),
